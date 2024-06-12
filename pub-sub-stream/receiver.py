@@ -1,12 +1,12 @@
 import json
+import time
 from queue import Queue
 from threading import Thread
-import time
 
-import mysql.connector
+import MySQLdb
 
 from model.biography import Biography
-from streamchannel.streams import polling_consumer, cancellation_token
+from streamchannel.streams import cancellation_token, polling_consumer
 
 
 def map_from_message(message_body: str) -> Biography:
@@ -15,8 +15,8 @@ def map_from_message(message_body: str) -> Biography:
 
 
 def handle_message(bio: Biography) -> bool:
-    mydb = mysql.connector.connect(
-        host="localhost",
+    mydb = MySQLdb.connect(
+        host="localhost",  # try host="127.0.0.1" if failing to connect to MySQL running in Docker
         user="root",
         password="root",
         database="Lookup"
